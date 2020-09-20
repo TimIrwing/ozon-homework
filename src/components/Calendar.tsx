@@ -1,21 +1,49 @@
 import { Component } from 'vue-property-decorator';
 import { useStore } from 'vuex-simple';
 import { RootStore } from '@/store';
+import Card from '@/components/Card';
 import VueComponent from '../shims-vue';
 
 import styles from './Calendar.css?module';
+
+function isSameDay(date1: Date, date2: Date) {
+  if (date1.getFullYear() !== date2.getFullYear()) return false;
+  if (date1.getMonth() !== date2.getMonth()) return false;
+  return date1.getDate() === date2.getDate();
+}
 
 @Component
 export default class Calendar extends VueComponent {
   store: RootStore = useStore(this.$store);
 
-  weekDay = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  weekDay: string[] = [
+    'Пн',
+    'Вт',
+    'Ср',
+    'Чт',
+    'Пт',
+    'Сб',
+    'Вс',
+  ];
 
-  monthName = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+  monthName: string[] = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+  ];
 
-  currentMonth = this.store.calendar.selectedDate.getMonth();
+  currentMonth: number = this.store.calendar.selectedDate.getMonth();
 
-  currentYear = this.store.calendar.selectedDate.getFullYear();
+  currentYear: number = this.store.calendar.selectedDate.getFullYear();
 
   setMonthToPrev(): void {
     if (this.currentMonth === 0) {
@@ -35,55 +63,105 @@ export default class Calendar extends VueComponent {
     }
   }
 
-  setSelectedDay(day: number) {
-    this.store.calendar.setSelectedDate(new Date(this.currentYear, this.currentMonth, day));
+  setSelectedDay(date: Date): void {
+    this.currentMonth = date.getMonth();
+    this.currentYear = date.getFullYear();
+    this.store.calendar.setSelectedDate(date);
   }
 
-  get monthMarkup() {
-    const result = [];
-    const daysCount = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
-    const firstDayName = new Date(this.currentYear, this.currentMonth, 1)
-      .toLocaleString('ru-RU', { weekday: 'short' });
+  getDayClasses(date: Date): string[] {
+    const dayClasses: string[] = [];
 
-    // grid padding for days to align with their names
-    this.weekDay.some((day) => {
-      if (firstDayName === day.toLowerCase()) {
-        return true;
-      }
-      return result.push(<span/>) && false;
-    });
+    const { today } = this.store.calendar;
+    const { selectedDate } = this.store.calendar;
 
-    // actual days markup
-    for (let dayNumber = 1; dayNumber <= daysCount; dayNumber += 1) {
+    if (isSameDay(today, date)) dayClasses.push(styles.day_today);
+    if (isSameDay(selectedDate, date)) dayClasses.push(styles.day_selected);
+    if (date.getMonth() !== this.currentMonth) dayClasses.push(styles.day_differentMonth);
+
+    return dayClasses;
+  }
+
+  get previousMonth(): JSX.Element[] {
+    const result: JSX.Element[] = [];
+    const date: Date = new Date(this.currentYear, this.currentMonth, 0);
+    const daysCount: number = date.getDay();
+    const lastDay: number = date.getDate();
+
+    for (let i = 0; i < daysCount; i += 1) {
       result.push(
-        <span>
-          <button onClick={ this.setSelectedDay.bind(this, dayNumber) }>{ dayNumber }</button>
-        </span>,
+        this.getDayMarkup(new Date(this.currentYear, this.currentMonth - 1, lastDay - i)),
+      );
+    }
+
+    return result.reverse();
+  }
+
+  get nextMonth(): JSX.Element[] {
+    const result: JSX.Element[] = [];
+    const date: Date = new Date(this.currentYear, this.currentMonth + 1, 1);
+    // getDay() counts weekdays from Sunday, a lil trick to fix that
+    let weekday: number = (date.getDay() + 6) % 7;
+
+    for (let i = 1; weekday > 0 && weekday < 7; i += 1, weekday += 1) {
+      result.push(
+        this.getDayMarkup(new Date(this.currentYear, this.currentMonth + 1, i)),
       );
     }
 
     return result;
   }
 
-  render() {
+  get weekdayMarkup(): JSX.Element[] {
+    return this.weekDay.map(
+      (day) => <span class={[styles.day_name, styles.grid__el]}>{day}</span>,
+    );
+  }
+
+  get monthMarkup(): JSX.Element[] {
+    const daysCount: number = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+    const result: JSX.Element[] = [...this.previousMonth];
+
+    for (let dayNumber = 1; dayNumber <= daysCount; dayNumber += 1) {
+      const dayDate = new Date(this.currentYear, this.currentMonth, dayNumber);
+      result.push(this.getDayMarkup(dayDate));
+    }
+
+    return result.concat(this.nextMonth);
+  }
+
+  getDayMarkup(date: Date): JSX.Element {
+    const buttonClasses: string[] = [
+      styles.day__button,
+      ...this.getDayClasses(date),
+    ];
+
     return (
-      <div>
-        <header>
-          <span>{ this.monthName[this.currentMonth] } { this.currentYear }</span>
+      <span class={styles.day}>
+        <button
+          class={buttonClasses}
+          onclick={this.setSelectedDay.bind(this, date)}>
+            {date.getDate()}
+        </button>
+      </span>
+    );
+  }
+
+  render(): JSX.Element {
+    return (
+      <Card>
+        <header class={styles.header}>
+          <span>{this.monthName[this.currentMonth]} {this.currentYear}</span>
           <span>
-            <button onClick={ this.setMonthToPrev }>{ '<' }</button>
-            <button onClick={ this.setMonthToNext }>{ '>' }</button>
+            <button class={styles.header__button} onclick={this.setMonthToPrev}>{'<'}</button>
+            <button class={styles.header__button} onclick={this.setMonthToNext}>{'>'}</button>
           </span>
         </header>
-        <section>
-          <div>
-            { this.weekDay.map((day) => <span>{ day }</span>) }
-          </div>
-          <div>
-            { this.monthMarkup }
-          </div>
+        <section class={styles.grid}>
+            {this.weekdayMarkup}
+            {this.monthMarkup}
         </section>
-      </div>
+      </Card>
     );
   }
 }

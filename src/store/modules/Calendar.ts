@@ -2,7 +2,10 @@ import { Mutation, State } from 'vuex-simple';
 
 export default class Calendar {
   @State()
-  public selectedDate = new Date();
+  public today = new Date();
+
+  @State()
+  public selectedDate = this.today;
 
   @Mutation()
   setSelectedDate(date: Date) {

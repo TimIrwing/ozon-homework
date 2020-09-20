@@ -1,0 +1,64 @@
+.header__button, .day__button {
+    padding: 0;
+    border: none;
+
+    cursor: pointer;
+    background: none;
+    color: inherit;
+    font: inherit;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: .5em 0 .5em .9em;
+
+    color: #6B7897;
+    font-size: 15px;
+    line-height: 18px;
+    letter-spacing: .05em;
+}
+.header__button {
+    width: 1.25em;
+    height: 100%;
+    font-size: 1.5em;
+}
+
+.day {
+    box-sizing: border-box;
+    width: 40px;
+    height: 32px;
+    padding: 0 4px;
+    justify-self: center;
+
+    color: #7C86A2;
+}
+.day_name {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    color: rgba(52, 72, 94, 0.536062);
+}
+.day_differentMonth { opacity: .333; }
+.day_today {
+    color: #506083;
+    font-weight: 600;
+}
+.day_selected {
+    background: linear-gradient(0deg, #7ED5FC 0%, #8ad4f5 100%);
+    color: white;
+}
+.day__button {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 100%;
+}
+
+.grid {
+    display: grid;
+    width: max-content;
+    min-width: 100%;
+
+    grid-template-columns: repeat(7, 1fr);
+}
+.grid__el { text-align: center; }

@@ -8,7 +8,7 @@ import Calculator from '@/store/modules/Calculator';
 
 Vue.use(Vuex);
 
-class RootStore {
+export class RootStore {
   @Module()
   public calendar = new Calendar();
 

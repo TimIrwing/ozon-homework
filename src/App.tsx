@@ -1,9 +1,8 @@
 import { Component, Vue } from 'vue-property-decorator';
 
-import logo from '@/assets/logo.png';
 import './App.css';
 
-import HelloWorld from './components/HelloWorld';
+import Calendar from '@/components/Calendar';
 
 @Component
 export default class App extends Vue {
@@ -11,8 +10,7 @@ export default class App extends Vue {
   render() {
     return (
       <div id="app">
-        <img alt="Vue logo" src={logo} />
-        <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+        <Calendar/>
       </div>
     );
   }

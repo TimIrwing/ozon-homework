@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "vue-cli-service build && echo ozon-homework.timirwing.dev > dist/CNAME",
+    "lint": "vue-cli-service lint",
+    "deploy": "npm run build && cd dist && git init && git add -A && git commit -m \"Deploy to GH Pages\" && git push -f https://github.com/TimIrwing/ozon-homework.git master:gh-pages && cd .. && rmdir dist /s /q"
   },
   "dependencies": {
     "core-js": "^3.6.5",

@@ -54,9 +54,11 @@ export default class Calendar extends VueComponent {
     });
 
     // actual days markup
-    for (let i = 1; i <= daysCount; i += 1) {
+    for (let dayNumber = 1; dayNumber <= daysCount; dayNumber += 1) {
       result.push(
-        <span><button onClick={ this.setSelectedDay.bind(this, i) }>{ i }</button></span>,
+        <span>
+          <button onClick={ this.setSelectedDay.bind(this, dayNumber) }>{ dayNumber }</button>
+        </span>,
       );
     }
 
@@ -65,7 +67,7 @@ export default class Calendar extends VueComponent {
 
   render() {
     return (
-      <div class={styles.hello}>
+      <div>
         <header>
           <span>{ this.monthName[this.currentMonth] } { this.currentYear }</span>
           <span>

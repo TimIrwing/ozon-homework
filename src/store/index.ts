@@ -1,24 +1,24 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 import { createVuexStore, Module } from 'vuex-simple';
 
-import { Calendar } from "@/store/modules/Calendar";
-import { Todo } from "@/store/modules/Todo";
-import { Calculator } from "@/store/modules/Calculator";
+import Calendar from '@/store/modules/Calendar';
+import Todo from '@/store/modules/Todo';
+import Calculator from '@/store/modules/Calculator';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 class RootStore {
   @Module()
-  public calendar = new Calendar()
+  public calendar = new Calendar();
 
   @Module()
-  public todo = new Todo()
+  public todo = new Todo();
 
   @Module()
-  public calculator = new Calculator()
+  public calculator = new Calculator();
 }
 
 export default createVuexStore(new RootStore(), {
   strict: false,
-})
+});

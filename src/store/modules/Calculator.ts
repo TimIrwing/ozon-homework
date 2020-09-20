@@ -1,3 +1,3 @@
-export class Calculator {
+export default class Calculator {
 
 }

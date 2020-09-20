@@ -1,16 +1,19 @@
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld';
 
-import './App.css'
+import logo from '@/assets/logo.png';
+import './App.css';
+
+import HelloWorld from './components/HelloWorld';
 
 @Component
 export default class App extends Vue {
+  // eslint-disable-next-line class-methods-use-this
   render() {
     return (
       <div id="app">
-        <img alt="Vue logo" src={require('./assets/logo.png')} />
-        <HelloWorld msg1="Welcome to Your Vue.js + TypeScript App"/>
+        <img alt="Vue logo" src={logo} />
+        <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
       </div>
-    )
+    );
   }
 }

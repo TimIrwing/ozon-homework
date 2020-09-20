@@ -1,15 +1,14 @@
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { VueComponent } from '../shims-vue';
+import { Component, Prop } from 'vue-property-decorator';
+import VueComponent from '../shims-vue';
 
-import styles from './HelloWorld.css?module'
+import styles from './HelloWorld.css?module';
 
 interface Props {
-  msg: string
+  msg: string;
 }
 
 @Component
 export default class HelloWorld extends VueComponent<Props> {
-
   @Prop()
   private msg!: string;
 
@@ -21,6 +20,6 @@ export default class HelloWorld extends VueComponent<Props> {
           ...
         </p>
       </div>
-    )
+    );
   }
 }

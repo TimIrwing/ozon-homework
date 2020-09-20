@@ -1,3 +1,3 @@
-export class Todo {
+export default class Todo {
 
 }

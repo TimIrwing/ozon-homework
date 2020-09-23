@@ -14,15 +14,17 @@ export default class Todos {
   private todos: Record<string, Todo[]> = Object.create(null);
 
   @Getter()
-  public hasTodo(date: Date): boolean {
-    return parseDate(date) in this.todos;
+  public get hasTodo(): Function {
+    return (date: Date): boolean => parseDate(date) in this.todos;
   }
 
   @Getter()
-  public getTodos(date: Date): Todo[] {
-    if (!this.hasTodo(date)) return [];
+  public get getTodos(): Function {
+    return (date: Date): Todo[] => {
+      if (!this.hasTodo(date)) return [];
 
-    return this.todos[parseDate(date)];
+      return this.todos[parseDate(date)];
+    };
   }
 
   @Mutation()

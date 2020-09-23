@@ -16,3 +16,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background-color: #F2F2F2;
 }
+
+.calendar-container {
+    display: flex;
+}
+
+.calendar-container > *:not(:first-child) {
+    margin-left: 32px;
+}

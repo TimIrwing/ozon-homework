@@ -3,6 +3,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import './App.css';
 
 import Calendar from '@/components/Calendar';
+import Todos from '@/components/Todos';
 
 @Component
 export default class App extends Vue {
@@ -10,7 +11,10 @@ export default class App extends Vue {
   render() {
     return (
       <div id="app">
-        <Calendar/>
+        <section class="calendar-container">
+          <Calendar/>
+          <Todos date={new Date()}/>
+        </section>
       </div>
     );
   }

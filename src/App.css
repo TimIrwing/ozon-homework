@@ -18,9 +18,8 @@ body {
 }
 
 .calendar-container {
-    display: flex;
-}
-
-.calendar-container > *:not(:first-child) {
-    margin-left: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: stretch;
+    grid-gap: 32px;
 }

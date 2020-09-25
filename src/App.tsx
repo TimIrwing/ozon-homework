@@ -7,13 +7,17 @@ import Todos from '@/components/Todos';
 
 @Component
 export default class App extends Vue {
-  // eslint-disable-next-line class-methods-use-this
+  selectedDate: Date = new Date();
+
   render() {
     return (
       <div id="app">
         <section class="calendar-container">
-          <Calendar/>
-          <Todos date={new Date()}/>
+          <Calendar
+            value={this.selectedDate}
+            onChange={(newDate: Date) => { this.selectedDate = newDate; }}
+          />
+          <Todos date={this.selectedDate}/>
         </section>
       </div>
     );

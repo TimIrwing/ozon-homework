@@ -1,6 +1,4 @@
-import { Component } from 'vue-property-decorator';
-import { useStore } from 'vuex-simple';
-import { RootStore } from '@/store';
+import { Component, Emit, Prop } from 'vue-property-decorator';
 import Card from '@/components/Card';
 import VueComponent from '../shims-vue';
 
@@ -13,8 +11,17 @@ function isSameDay(date1: Date, date2: Date) {
 }
 
 @Component
-export default class Calendar extends VueComponent {
-  store: RootStore = useStore(this.$store);
+export default class Calendar extends VueComponent<{ value: Date}> {
+  today: Date = new Date();
+
+  @Prop({ default: () => new Date() })
+  value!: Date;
+
+  @Emit('change')
+  setSelectedDay(date: Date): void {
+    this.currentMonth = date.getMonth();
+    this.currentYear = date.getFullYear();
+  }
 
   weekDay: string[] = [
     'Пн',
@@ -41,9 +48,9 @@ export default class Calendar extends VueComponent {
     'Декабрь',
   ];
 
-  currentMonth: number = this.store.calendar.selectedDate.getMonth();
+  currentMonth: number = this.value.getMonth();
 
-  currentYear: number = this.store.calendar.selectedDate.getFullYear();
+  currentYear: number = this.value.getFullYear();
 
   setMonthToPrev(): void {
     if (this.currentMonth === 0) {
@@ -63,20 +70,11 @@ export default class Calendar extends VueComponent {
     }
   }
 
-  setSelectedDay(date: Date): void {
-    this.currentMonth = date.getMonth();
-    this.currentYear = date.getFullYear();
-    this.store.calendar.setSelectedDate(date);
-  }
-
   getDayClasses(date: Date): string[] {
     const dayClasses: string[] = [];
 
-    const { today } = this.store.calendar;
-    const { selectedDate } = this.store.calendar;
-
-    if (isSameDay(today, date)) dayClasses.push(styles.day_today);
-    if (isSameDay(selectedDate, date)) dayClasses.push(styles.day_selected);
+    if (isSameDay(this.today, date)) dayClasses.push(styles.day_today);
+    if (isSameDay(this.value, date)) dayClasses.push(styles.day_selected);
     if (date.getMonth() !== this.currentMonth) dayClasses.push(styles.day_differentMonth);
 
     return dayClasses;

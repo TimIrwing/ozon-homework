@@ -14,7 +14,7 @@ function isSameDay(date1: Date, date2: Date) {
 export default class Calendar extends VueComponent<{ value: Date}> {
   today: Date = new Date();
 
-  @Prop({ default: () => new Date() })
+  @Prop({ required: true })
   value!: Date;
 
   @Emit('change')

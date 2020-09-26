@@ -60,14 +60,14 @@ export default class Todos {
   }
 
   @Mutation()
-  private addTodoMutation([date, todo]: [Date, Todo]) {
+  private addTodoMutation([date, { text }]: [Date, Todo]) {
     const day = parseDate(date);
 
     if (!this.hasTodo(date)) {
       Vue.set(this.todos, day, []);
     }
 
-    this.todos[day].push(todo);
+    this.todos[day].push({ text: formatText(text) });
   }
 
   @Mutation()

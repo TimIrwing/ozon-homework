@@ -1,11 +1,21 @@
+.container {
+    height: max-content;
+}
+
 .header__button, .day__button {
     padding: 0;
-    border: none;
+    border: 1px solid transparent;
 
     cursor: pointer;
     background: none;
     color: inherit;
     font: inherit;
+    outline: none;
+}
+
+.header__button:focus,
+.day__button:focus {
+    border: 1px solid currentColor;
 }
 
 .header {

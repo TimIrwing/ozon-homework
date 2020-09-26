@@ -138,7 +138,9 @@ export default class Calendar extends VueComponent<{ value: Date}> {
       <span class={styles.day}>
         <button
           class={buttonClasses}
-          onclick={this.setSelectedDay.bind(this, date)}>
+          onclick={this.setSelectedDay.bind(this, date)}
+          key={date.toLocaleDateString('ru-RU')}
+        >
             {date.getDate()}
         </button>
       </span>
@@ -147,7 +149,7 @@ export default class Calendar extends VueComponent<{ value: Date}> {
 
   render(): JSX.Element {
     return (
-      <Card>
+      <Card class={styles.container}>
         <header class={styles.header}>
           <span>{this.monthName[this.currentMonth]} {this.currentYear}</span>
           <span>

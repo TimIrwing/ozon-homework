@@ -15,7 +15,7 @@ export default class Todos extends VueComponent<{ date: Date }> {
   @Prop({ default: () => new Date() })
   private date!: Date;
 
-  get todos() {
+  get todos(): Todo[] {
     return this.store.todos.getTodos(this.date);
   }
 
@@ -25,15 +25,24 @@ export default class Todos extends VueComponent<{ date: Date }> {
     this.store.todos.toggleTodo([this.date, todo]);
   }
 
-  get todosMarkup() {
+  get todosMarkup(): JSX.Element {
     return (
-      <ul>
+      <ul class={styles.list}>
         {
           this.todos.map((todo: Todo) => (
-            <li>
-              <label>
-                <input type="checkbox" checked={todo.done} onChange={this.toggleTodo.bind(this, todo)}/>
-                <span>{todo.text}</span>
+            <li class={styles.listItem}>
+              <label class={styles.label}>
+                 <input
+                  class={'visuallyhidden'}
+                  type="checkbox"
+                  checked={todo.done}
+                  onChange={this.toggleTodo.bind(this, todo)}
+                 />
+                 <span class={[
+                   styles.fakeCheckbox,
+                   todo.done ? styles.fakeCheckbox_checked : null,
+                 ]}/>
+                 <span class={todo.done ? styles.text_done : null}>{todo.text}</span>
               </label>
             </li>
           ))
@@ -54,14 +63,14 @@ export default class Todos extends VueComponent<{ date: Date }> {
     }
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <Card>
-        <p class={styles.todos__title}>События - {this.date.toLocaleDateString('ru-RU')}</p>
+        <p class={styles.title}>События - {this.date.toLocaleDateString('ru-RU')}</p>
 
         {this.todosMarkup}
 
-        <input type="text" placeholder="Текст" onKeydown={this.keydownHandler}/>
+        <input class={styles.input} type="text" placeholder="Текст" onKeydown={this.keydownHandler}/>
       </Card>
     );
   }

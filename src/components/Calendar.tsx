@@ -1,4 +1,7 @@
 import { Component, Emit, Prop } from 'vue-property-decorator';
+import { RootStore } from '@/store';
+import { useStore } from 'vuex-simple';
+
 import Card from '@/components/Card';
 import VueComponent from '../shims-vue';
 
@@ -12,6 +15,8 @@ function isSameDay(date1: Date, date2: Date) {
 
 @Component
 export default class Calendar extends VueComponent<{ value: Date}> {
+  store: RootStore = useStore(this.$store);
+
   today: Date = new Date();
 
   @Prop({ required: true })
@@ -52,6 +57,10 @@ export default class Calendar extends VueComponent<{ value: Date}> {
 
   currentYear: number = this.value.getFullYear();
 
+  hasTodo(date: Date): boolean {
+    return this.store.todos.hasTodo(date);
+  }
+
   setMonthToPrev(): void {
     if (this.currentMonth === 0) {
       this.currentMonth = 11;
@@ -75,6 +84,7 @@ export default class Calendar extends VueComponent<{ value: Date}> {
 
     if (isSameDay(this.today, date)) dayClasses.push(styles.day_today);
     if (isSameDay(this.value, date)) dayClasses.push(styles.day_selected);
+    if (this.hasTodo(date)) dayClasses.push(styles.day_hasTodo);
     if (date.getMonth() !== this.currentMonth) dayClasses.push(styles.day_differentMonth);
 
     return dayClasses;

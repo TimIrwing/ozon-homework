@@ -4,6 +4,7 @@ import './App.css';
 
 import Calendar from '@/components/Calendar';
 import Todos from '@/components/Todos';
+import Calculator from '@/components/Calculator';
 
 @Component
 export default class App extends Vue {
@@ -19,6 +20,7 @@ export default class App extends Vue {
           />
           <Todos date={this.selectedDate}/>
         </section>
+        <Calculator/>
       </div>
     );
   }

@@ -5,15 +5,19 @@ import {
 export enum actions {
   plus = '+',
   minus = '-',
-  clear = 'C',
+  clear = 'c',
   result = '=',
+}
+
+function isAction(input: string) {
+  return Number.isNaN(Number(input));
 }
 
 function someAsyncCalcFunction(arr: string[]): Promise<string> {
   return new Promise((resolve) => {
     setTimeout(() => {
       while (arr.length >= 3) {
-        const [num1, action, num2] = arr.splice(arr.length - 3, 3);
+        const [num1, action, num2] = arr.splice(0, 3);
         let tmp = 0;
 
         switch (action) {
@@ -28,10 +32,10 @@ function someAsyncCalcFunction(arr: string[]): Promise<string> {
           default:
         }
 
-        arr.push(String(tmp));
+        arr.unshift(String(tmp));
       }
 
-      resolve(arr.pop());
+      resolve(arr.shift());
     }, 2000);
   });
 }
@@ -46,23 +50,18 @@ export default class Calculator {
   @State()
   loading = false;
 
-  @State()
-  equalSignVisible = false;
-
-  @Getter()
-  get bufferToRender(): string[] {
-    if (this.equalSignVisible) {
-      return [actions.result, ...this.mainBuffer];
+  set equalSignVisible(val: boolean) {
+    if (val && this.mainBuffer[0] !== actions.result) {
+      this.mainBuffer.unshift(actions.result);
+    } else if (this.mainBuffer[0] === actions.result) {
+      this.mainBuffer.shift();
     }
-    return this.mainBuffer;
   }
 
   @Getter()
-  get lastItemIsAction(): Function {
-    return (): boolean => {
-      const last = this.mainBuffer[this.mainBuffer.length - 1];
-      return Number.isNaN(Number(last));
-    };
+  get lastItemIsAction(): boolean {
+    const last = this.mainBuffer[this.mainBuffer.length - 1];
+    return isAction(last);
   }
 
   @Action()
@@ -103,16 +102,18 @@ export default class Calculator {
 
   @Action()
   async calculateResult(): Promise<void> {
+    if (this.mainBuffer.length < 3) return;
     try {
       this.loading = true;
 
+      if (this.lastItemIsAction) this.mainBuffer.pop();
       const copy = [...this.mainBuffer];
-
-      if (this.lastItemIsAction) copy.pop();
-
       const result = await someAsyncCalcFunction(copy);
 
-      this.upperBuffer = this.mainBuffer;
+      this.upperBuffer = this.mainBuffer.map((part) => {
+        if (isAction(part)) return part;
+        return String(Number(part));
+      });
       this.mainBuffer = [result];
       this.equalSignVisible = true;
     } catch (e) {
@@ -124,6 +125,7 @@ export default class Calculator {
 
   @Mutation()
   clearBuffers() {
+    this.hideEqualSign();
     this.upperBuffer = [];
     this.mainBuffer = [];
   }

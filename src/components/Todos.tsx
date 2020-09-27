@@ -40,9 +40,9 @@ export default class Todos extends VueComponent<{ date: Date }> {
                  />
                  <span class={[
                    styles.fakeCheckbox,
-                   todo.done ? styles.fakeCheckbox_checked : null,
+                   todo.done && styles.fakeCheckbox_checked,
                  ]}/>
-                 <span class={todo.done ? styles.text_done : null}>{todo.text}</span>
+                 <span class={todo.done && styles.text_done}>{todo.text}</span>
               </label>
             </li>
           ))

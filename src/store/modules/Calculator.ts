@@ -13,7 +13,7 @@ function someAsyncCalcFunction(arr: string[]): Promise<string> {
   return new Promise((resolve) => {
     setTimeout(() => {
       while (arr.length >= 3) {
-        const [num1, action, num2] = arr.splice(0, 3);
+        const [num1, action, num2] = arr.splice(arr.length - 3, 3);
         let tmp = 0;
 
         switch (action) {
@@ -28,10 +28,10 @@ function someAsyncCalcFunction(arr: string[]): Promise<string> {
           default:
         }
 
-        arr.unshift(String(tmp));
+        arr.push(String(tmp));
       }
 
-      resolve(arr.shift());
+      resolve(arr.pop());
     }, 2000);
   });
 }
@@ -67,7 +67,7 @@ export default class Calculator {
 
   @Action()
   addDigit(digit: number) {
-    this.hideEqualsSign();
+    this.hideEqualSign();
 
     if (this.lastItemIsAction || !this.mainBuffer.length) {
       this.mainBuffer.push(String(digit));
@@ -79,7 +79,7 @@ export default class Calculator {
 
   @Action()
   action(action: string) {
-    this.hideEqualsSign();
+    this.hideEqualSign();
     switch (action) {
       case actions.plus:
         this.pushAction(actions.plus);
@@ -90,8 +90,7 @@ export default class Calculator {
         break;
 
       case actions.clear:
-        this.upperBuffer = [];
-        this.mainBuffer = [];
+        this.clearBuffers();
         break;
 
       case actions.result:
@@ -124,6 +123,12 @@ export default class Calculator {
   }
 
   @Mutation()
+  clearBuffers() {
+    this.upperBuffer = [];
+    this.mainBuffer = [];
+  }
+
+  @Mutation()
   pushAction(action: '+' | '-') {
     if (this.lastItemIsAction || !this.mainBuffer.length) return;
 
@@ -131,7 +136,7 @@ export default class Calculator {
   }
 
   @Mutation()
-  hideEqualsSign() {
+  hideEqualSign() {
     this.equalSignVisible = false;
   }
 }

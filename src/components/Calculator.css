@@ -99,6 +99,11 @@
     opacity: .5;
     cursor: not-allowed;
 }
+.button:focus {
+    outline: none;
+    border: 1px currentColor solid;
+    border-radius: 1px;
+}
 .button_action {
     font-weight: bold;
     color: white;

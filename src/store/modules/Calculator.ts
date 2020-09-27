@@ -3,9 +3,9 @@ import {
 } from 'vuex-simple';
 
 export enum actions {
-  plus = '+',
-  minus = '-',
   clear = 'c',
+  minus = '-',
+  plus = '+',
   result = '=',
 }
 

@@ -46,12 +46,12 @@
 .day_name {
     padding-top: 12px;
     padding-bottom: 12px;
-    color: rgba(52, 72, 94, 0.536062);
+    color: #b7bec6;
 }
 .day_differentMonth { opacity: .333; }
 .day_today {
     text-decoration: underline;
-    font-weight: 600;
+    font-weight: 700;
     color: #506083;
 }
 .day_hasTodo {
@@ -59,7 +59,7 @@
 }
 .day_selected {
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     color: white;
     background: linear-gradient(0deg, #7ED5FC 0%, #8ad4f5 100%);
 }

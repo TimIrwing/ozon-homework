@@ -50,6 +50,10 @@ export default class Calculator {
   @State()
   loading = false;
 
+  get equalSignVisible(): boolean {
+    return this.mainBuffer[0] === actions.result;
+  }
+
   set equalSignVisible(val: boolean) {
     if (val && this.mainBuffer[0] !== actions.result) {
       this.mainBuffer.unshift(actions.result);
@@ -66,13 +70,13 @@ export default class Calculator {
 
   @Action()
   addDigit(digit: number) {
-    this.hideEqualSign();
+    if (this.equalSignVisible) this.mainBuffer = [];
 
     if (this.lastItemIsAction || !this.mainBuffer.length) {
       this.mainBuffer.push(String(digit));
     } else {
-      const number = this.mainBuffer.pop();
-      if (number) this.mainBuffer.push(number + digit);
+      const number: string | undefined = this.mainBuffer.pop();
+      if (number) this.mainBuffer.push(number + String(digit));
     }
   }
 

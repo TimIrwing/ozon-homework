@@ -129,7 +129,6 @@ export default class Calculator {
 
   @Mutation()
   clearBuffers() {
-    this.hideEqualSign();
     this.upperBuffer = [];
     this.mainBuffer = [];
   }

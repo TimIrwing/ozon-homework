@@ -54,9 +54,7 @@
     font-weight: 700;
     color: #506083;
 }
-.day_hasTodo {
-    color: #AA3434;
-}
+.day_hasTodo { color: #AA3434 }
 .day_selected {
     text-decoration: none;
     font-weight: 700;

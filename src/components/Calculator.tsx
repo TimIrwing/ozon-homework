@@ -46,21 +46,15 @@ export default class Calculator extends VueComponent {
   }
 
   get digitsMarkup(): JSX.Element[] {
-    const result = [];
-
-    for (let digit = 0; digit < 10; digit += 1) {
-      result.push(
-        <button
-          disabled={this.loading}
-          class={[styles.button, styles[`digit_${digit}`]]}
-          onClick={this.addDigit.bind(this, digit)}
-        >
-          {digit}
-        </button>,
-      );
-    }
-
-    return result;
+    return Array(10).fill(1).map((_, digit) => (
+      <button
+        disabled={this.loading}
+        class={[styles.button, styles[`digit_${digit}`]]}
+        onClick={this.addDigit.bind(this, digit)}
+      >
+        {digit}
+      </button>
+    ));
   }
 
   render(): JSX.Element {
